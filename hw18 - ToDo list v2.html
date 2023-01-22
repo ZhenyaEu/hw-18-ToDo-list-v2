@@ -1,0 +1,102 @@
+<body>
+    <script>
+
+        class Todo {
+
+            constructor() {
+
+                this.list = [];
+            }
+
+            add(title, text) {
+                const note = {
+                    title,
+                    text,
+                    completed: false
+                };
+
+                if (this.checkUniq(title)) {
+                    this.list.push(note)
+                }
+            }
+
+            remove(title) {
+                const index = this.list.findIndex(note => note.title === title);
+                const confirm = this.#confirmation();
+                if (!confirm) return;
+                this.list.splice(index, 1);
+            }
+
+
+            toggle(title) {
+                this.list.forEach(note => {
+                    if (note.title === title) {
+                        note.completed = !note.completed
+                    }
+                })
+            }
+
+
+            info() {
+                return this.list.reduce((info, note) => {
+                    if (!info.total) {
+                        info.total = this.list.length;
+                    }
+
+                    if (!info[note.completed]) {
+                        info[note.completed] = 0;
+                    }
+
+                    info[note.completed]++;
+                    return info;
+                }, {})
+            }
+
+
+
+
+            checkUniq(title) {
+                return !this.list.find(note => note.title === title);
+            }
+
+
+
+
+            edit(title, newtext) {
+                const index = this.list.findIndex(note => note.title === title);
+
+                const confirm = this.#confirmation();
+                if (!confirm) return;
+                this.list[index].text = newtext;
+            }
+
+
+
+            #confirmation() {
+
+                return confirm('Are u sure?');
+
+            }
+
+        }
+
+
+
+
+        const toDoList = new Todo();
+
+        toDoList.add('Swim', 'Swim 2 km this morning');
+        toDoList.add('Eat', 'Eat 2 kg of meat');
+        toDoList.add('Buy', 'Buy 2 kg of meat');
+
+        toDoList.edit("Eat", 'Eat 2 kilo of sousages' )
+        
+        toDoList.toggle('Swim')
+        
+        console.log(toDoList.info());
+        console.log(toDoList.list);
+
+
+
+    </script>
+</body>
